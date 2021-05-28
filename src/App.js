@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-function App() {
+import { Container } from "@material-ui/core";
+import Navbar from "./components/Navbar/Navbar";
+import About from "./pages/About/About";
+import Charts from "./pages/Charts/Charts";
+import Articles from "./pages/Articles/Articles";
+
+// import CoronaBack from "./assets/corona-header-pattern2.png";
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Container
+        maxWidth="lg"
+        // style={{
+        //   position: "relative",
+        //   "&::before": {
+        //     zIndex: -1,
+        //     position: "absolute",
+        //     content: `url(${CoronaBack}) `,
+        //     opacity: 0.4,
+        //   },
+        // }}
+      >
+        <Route exact path={["/*"]} component={Navbar} />
+        <Switch>
+          <Route exact path={["", "/about"]} component={About} />
+          <Route exact path={["/charts"]} component={Charts} />
+          <Route exact path={["/articles"]} component={Articles} />
+        </Switch>
+      </Container>
+    </BrowserRouter>
   );
 }
-
-export default App;
