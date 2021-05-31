@@ -12,8 +12,8 @@ export const withError = (message) => async (operation, dispatch) => {
     await operation();
   } catch (error) {
     console.log(error.message);
-    console.log(message);
-    dispatch(setOperationError(message));
+    console.log(error);
+    dispatch(setOperationError(`${error.message || message}`));
   }
 };
 export const withFetching = (setFetching) => async (operation, dispatch) => {
@@ -41,6 +41,6 @@ export const CustomWithFetchingWithError =
       dispatch,
       [
         withFetching(args?.setFetching || (() => void 0)),
-        withError("Server Error"),
+        withError("HTTP REQUEST error"),
       ]
     );

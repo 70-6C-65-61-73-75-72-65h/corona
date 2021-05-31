@@ -5,6 +5,7 @@ export default makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    flexGrow: 1,
   },
   chartWrapper: { width: "70vw !important", height: "70vh !important" },
   chartContainer: {
@@ -14,4 +15,5 @@ export default makeStyles((theme) => ({
     width: "100%",
     height: "100%",
   },
+  // errorContainer: { display: "flex", justifyContent: "flex-end" },
 }));

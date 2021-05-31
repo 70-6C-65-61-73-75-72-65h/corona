@@ -23,8 +23,8 @@ const initialState = {
   // virus historical
   virusHistoricalTotal: { ...virusState },
   virusHistoricalInCountry: { ...virusState },
-  // opeartionError
-  opeartionError: "",
+  // operationError
+  operationError: "",
 };
 
 export default function virusInfoReducer(state = initialState, action) {
@@ -69,7 +69,7 @@ export default function virusInfoReducer(state = initialState, action) {
       };
     }
     case SET_OPERATION_ERROR: {
-      return { ...state, opeartionError: action.error };
+      return { ...state, operationError: action.error };
     }
     default: {
       return { ...state };

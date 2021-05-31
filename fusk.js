@@ -6,9 +6,9 @@ const {
   virusHistoricalTotal,
   virusHistoricalInCountry,
   selectedCountry, // if we change it it automaticly will change fetched countries in parent component -> se we will obtain new data lists
-  opeartionError,
+  operationError,
 } = useSelector((state) => state.virusInfo);
-//   opeartionError show by notification
+//   operationError show by notification
 
 const calcChartData = useCallback(() => {
   // async

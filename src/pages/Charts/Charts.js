@@ -21,11 +21,6 @@ import {
 } from "../../redux/actions/virusInfo.actions";
 
 import Chart from "../../components/Chart/Chart";
-
-// import { virusHistoryFields } from "../../constants/commonFetchFields";
-
-// import { createDataFromArray } from "../../utils/chartUtils";
-
 import {
   vaccine,
   cases,
@@ -40,6 +35,8 @@ import useStyles from "./styles";
 import * as Comlink from "comlink";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Worker from "worker-loader!./chartDataPopulation";
+import { operationError404 } from "../../constants/errors";
+import { setOperationError } from "../../redux/actions/mixins";
 // import worker from "workerize-loader!./chartDataPopulation";
 // const workerInstance = worker();
 
@@ -54,8 +51,8 @@ async function calcHardData(args) {
   const worker = new Worker();
   const obj = Comlink.wrap(worker);
   const { res, time: timeOperation } = await obj.populate(args);
-  console.log(res);
-  console.log(timeOperation);
+  // console.log(res);
+  // console.log(timeOperation);
   worker.terminate();
   return res;
 }
@@ -88,9 +85,9 @@ export default function Charts() {
     virusHistoricalTotal,
     virusHistoricalInCountry,
     selectedCountry, // if we change it it automaticly will change fetched countries in parent component -> se we will obtain new data lists
-    opeartionError,
+    operationError,
   } = useSelector((state) => state.virusInfo); // after each render selector get new objects
-  //   opeartionError show by notification
+  //   operationError show by notification
 
   // const chartDataCalc =
   useEffect(() => {
@@ -105,42 +102,6 @@ export default function Charts() {
       ) {
         if (chartData !== []) setChartData([]); // to prevent unusefull reRender
       } else {
-        // replace ????????????????????????????????????????????????????????????????
-        // const worker = new window.Worker("./chartDataPopulation.js");
-        // worker.postMessage({
-        //   vaccineCoverage,
-        //   vaccineCoverageInCountry,
-        //   selectedCountry,
-        //   virusHistoricalInCountry,
-        //   virusHistoricalTotal,
-        //   time,
-        //   vaccine,
-        //   cases,
-        //   recovered,
-        //   deaths,
-        // });
-        // worker.onerror = (err) => err;
-        // worker.onmessage = (e) => {
-        //   console.log(e.data?.timeCalc);
-        //   console.log(e.data?.chartCalc);
-        //   setChartData(e.data?.chartCalc);
-        //   worker.terminate();
-        // };
-        // const instance = worker();
-        // const result = await instance.chartDataPopulate({
-        //   vaccineCoverage,
-        //   vaccineCoverageInCountry,
-        //   selectedCountry,
-        //   virusHistoricalInCountry,
-        //   virusHistoricalTotal,
-        //   time,
-        //   vaccine,
-        //   cases,
-        //   recovered,
-        //   deaths,
-        // });
-        // // console.log(result);
-        // setChartData(result);
         const res = await calcHardData({
           vaccineCoverage,
           vaccineCoverageInCountry,
@@ -170,7 +131,7 @@ export default function Charts() {
     // we will fetch country data as user check country (if not -> firstly load total data)
     // debugger;
     const countryCode = selectedCountry?.code;
-    console.log("runs");
+    // console.log("runs");
     if (countryCode) {
       dispatch(fetchVaccineCountry(countryCode, setFetchingVaccine));
       dispatch(fetchVirusCountryHistorical(countryCode, setFetchingVirus));
@@ -178,11 +139,10 @@ export default function Charts() {
       dispatch(fetchVaccineTotal(setFetchingVaccine));
       dispatch(fetchVirusHistoryTotal(setFetchingVirus));
     }
+    dispatch(setOperationError(""));
   }, [selectedCountry, dispatch]);
 
-  if (opeartionError)
-    console.log(`\n\nERROR!!!!\n\nopeartionError\n: ${opeartionError}`);
-
+  // if (operationError) console.log(`\n: ${operationError}`);
   // if (fetchingVaccine || fetchingVirus) return <CircularProgress size={400} />;
 
   return (
@@ -206,14 +166,22 @@ export default function Charts() {
           <div className={`${classes.chartWrapper} ${classes.chartFetching}`}>
             <CircularProgress size={400} />
           </div>
-        ) : (
+        ) : !operationError ? (
           // <div>СКот</div>
           <Chart
             wrapperClass={classes.chartWrapper}
             chartData={chartData}
             lineKeys={lineKeys}
           />
+        ) : (
+          <div className={classes.chartFetching}>
+            {" "}
+            {operationError404 === operationError
+              ? " No Such country exists on service API"
+              : `Unexpected Error: ${operationError}`}
+          </div>
         )}
+
         <ChartNavigation
           toogleChartKey={toogleChartKey}
           lineKeys={lineKeys}
