@@ -53,8 +53,10 @@ import Worker from "worker-loader!./chartDataPopulation";
 async function calcHardData(args) {
   const worker = new Worker();
   const obj = Comlink.wrap(worker);
-  const res = await obj.populate(args);
+  const { res, time: timeOperation } = await obj.populate(args);
   console.log(res);
+  console.log(timeOperation);
+  worker.terminate();
   return res;
 }
 
@@ -93,6 +95,8 @@ export default function Charts() {
   // const chartDataCalc =
   useEffect(() => {
     const calc = async () => {
+      // console.log("debugger");
+      // debugger;
       if (
         (!(vaccineCoverage && virusHistoricalTotal.cases) &&
           !(vaccineCoverageInCountry && virusHistoricalInCountry.cases)) ||
@@ -203,6 +207,7 @@ export default function Charts() {
             <CircularProgress size={400} />
           </div>
         ) : (
+          // <div>СКот</div>
           <Chart
             wrapperClass={classes.chartWrapper}
             chartData={chartData}

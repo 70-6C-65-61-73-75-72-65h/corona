@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checks</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .img {
+        width: 400px;
+        /* height: 400px;  */
+        /* block always wold be 400 px but height of child would be less than that -> would be a lot of free unused space on page ( so better to use padding-bottom with 0 height ) */
+      }
+      .ratio4-3 {
+        /* width: 80%; */
+        display: flex;
+        background-image: url(fusk.svg);
+        background-size: cover;
+        /* height: -webkit-calc(80% * 9 / 16); */
+        /* padding: 0; reset
+        padding-bottom: calc(80% * 9 / 16); */
+        /* padding-bottom: calc(80% * 9 / 16); */
+        padding-bottom: calc(
+          80% * 20 / 24
+        ); /* height/width coordinates from svg element - > 20/24 */
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- if i dont set width height -> it would be 100vw 100vh (or  300px wide, 150px tall. deps to browser) -> if set ( it would be in pixels ) -->
+    <!-- svg {width: 100%; height: auto;} caused default height retrieved from borwser spec (150px or 100vh)-->
+    <!-- viewBox="-700 -260 1600 720" -->
+    <div class="container">
+      <div class="img"><div class="ratio4-3"></div></div>
+    </div>
+  </body>
+</html>
